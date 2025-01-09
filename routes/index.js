@@ -58,24 +58,26 @@ router.get('/', async (req, res) => {
       };
     });
 
+
     let ultimaHora = ultimoResultado.Hora;
+    
+    
     let [hora, minuto] = ultimaHora.split(':');
-    let [horaNum, ampm] = hora.split(' '); 
+    let [horaNum, ampm] = hora.split(' ');
     horaNum = parseInt(horaNum);
     if (ampm === 'pm' && horaNum < 12) horaNum += 12;
-
     let fechaHora = new Date();
     fechaHora.setHours(horaNum);
     fechaHora.setMinutes(parseInt(minuto));
     fechaHora.setHours(fechaHora.getHours() + 1);
-
-    let nuevaHora = `${fechaHora.getHours()}:${fechaHora.getMinutes() < 10 ? '0' : ''}${fechaHora.getMinutes()} ${fechaHora.getHours() < 12 ? 'am' : 'pm'}`;
-
-
+    let nuevaHora = `${fechaHora.getHours()}:${fechaHora.getMinutes() < 10 ? '0' : ''}${fechaHora.getMinutes()} ${fechaHora.getHours() < 12 ? 'pm' : 'am'}`;
+    
+    
+    
+    
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
     let existeFecha = false;
-
     if (snapshot.exists()) {
       const datos = snapshot.val();
       for (const key in datos) {
@@ -86,7 +88,7 @@ router.get('/', async (req, res) => {
       }
     }
 
-    if (!existeFecha && resultados.length >= 12) {
+    if (!existeFecha && resultados.length == 12) {
       const datosAGuardar = resultados.map((resultado, index) => ({
         numero: resultado.Numero,
         animal: resultado.Animal,
@@ -145,9 +147,9 @@ router.get('/resultadosporfecha', async (req, res) => {
 });
 
 
-router.post('/resultadosporfecha',async(req,res) => {
+router.post('/resultadosporfecha', async (req, res) => {
   try {
-    const fechaInput  = req.body.fecha;
+    const fechaInput = req.body.fecha;
     const convertirFecha = (fecha) => {
       const [year, month, day] = fecha.split('-');
       return `${day}-${month}-${year}`;
@@ -155,7 +157,7 @@ router.post('/resultadosporfecha',async(req,res) => {
 
     let fechaBusquedaAnimal = '';
     if (fechaInput.trim() !== '') {
-      fechaBusquedaAnimal = convertirFecha(fechaInput); 
+      fechaBusquedaAnimal = convertirFecha(fechaInput);
     }
 
     console.log(fechaBusquedaAnimal);
@@ -175,7 +177,7 @@ router.post('/resultadosporfecha',async(req,res) => {
     }
 
     if (!resultadosFecha) {
-      resultadosFecha = { resultados: [] }; 
+      resultadosFecha = { resultados: [] };
     }
 
     res.render('resultadosporfecha', {
