@@ -1,0 +1,86 @@
+/* Transiciones suaves al cambiar de modo */
+.transition-mode {
+    transition: all 0.3s ease;
+  }
+
+  .card {
+    transition: transform .3s ease !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Agregar transición al pasar el mouse */
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: transform .3s ease !important;
+  }
+
+  /* Estilos para el modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    /* Inicialmente invisible */
+    transform: scale(0.9);
+    /* Inicialmente pequeño */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    /* Animación de apertura */
+  }
+
+  .modal-content {
+    position: relative;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .modal img {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: white;
+  }
+
+  /* Modo oscuro */
+  .dark-mode .modal-content {
+    background-color: #2d2d2d;
+    color: white;
+  }
+
+  .dark-mode .modal-close {
+    color: white;
+  }
+
+  /* Modo claro */
+  .light-mode .modal-content {
+    background-color: white;
+    color: black;
+  }
+
+  .light-mode .modal-close {
+    color: black;
+  }
+
+  .modal.show {
+    display: flex;
+    /* Mostrar el modal */
+    opacity: 1;
+    /* Hacerlo completamente visible */
+    transform: scale(1);
+    /* Escalar a tamaño normal */
+  }

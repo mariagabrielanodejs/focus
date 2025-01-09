@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultados Lotto</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheets/animalitos.css">
+
+  <link rel="stylesheet" data-purpose="Layout StyleSheet" title="Web Awesome"
+    href="/css/app-wa-4605c815f1874757bc9ac33aa114fb0f.css?vsn=d">
+
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
+
+
+
+
+</head>
+
+<body class="bg-gray-900 text-gray-100 p-8 transition-mode">
+  <div class="container mx-auto max-w-7xl">
+    <div class="text-right mb-6">
+      <button id="toggleButton" onclick="toggleMode()"
+        class="px-4 py-2 bg-zinc-700 text-white rounded-md shadow-md hover:bg-zinc-600 transition duration-300 flex items-center gap-2">
+        <i id="iconMode" class="fa-solid fa-moon"></i>
+        <span id="modeText">Modo oscuro</span>
+      </button>
+    </div>
+    
+    <h1 class="text-5xl font-extrabold text-white text-center mb-12 transition-colors">
+      Focus
+    </h1>
+
+    <div class="text-center mb-6">
+      <button onclick="openModal()"
+        class="px-4 py-2 bg-green-600 text-white rounded-md shadow-md hover:bg-green-700 transition duration-300">
+        Posible animal a salir
+      </button>
+      <a href="/resultadosporfecha"
+        class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition duration-300">
+        Fechas anteriores
+      </a>
+    </div>
+
+    <% if (resultados.length> 0) { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <% resultados.forEach(resultado=> { %>
+          <div
+            class="card bg-gray-800 p-6 rounded-xl shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl transition-colors">
+            <img src="<%= resultado.ImagenURL %>" class="pb-5" alt="Imagen del resultado">
+            <div class="text-white">
+              <p class="mb-2 text-lg"><strong class="font-semibold">Fecha:</strong>
+                <%= resultado.Fecha %>
+              </p>
+              <p class="mb-2 text-lg"><strong class="font-semibold">Número:</strong>
+                <%= resultado.Numero %> - <%= resultado.Animal %>
+              </p>
+              <p class="mb-2 text-lg"><strong class="font-semibold">Hora:</strong>
+                <%= resultado.Hora %>
+              </p>
+            </div>
+          </div>
+          <% }); %>
+      </div>
+      <% } else { %>
+        <p class="text-center text-xl text-gray-400 mt-12">No hay resultados hasta mañana a las 8:00 a.m.</p>
+        <% } %>
+
+          <!-- Modal -->
+          <div id="animalModal" class="modal">
+            <div id="modalContent" class="modal-content bg-gray-800">
+              <span class="modal-close" onclick="closeModal()">×</span>
+              <!-- Mostrar la hora calculada -->
+              <% if (resultados.length> 0) { %>
+
+              <div class="position-modal-content flex flex-col items-center justify-center">
+                <p class="text-lg">
+                  Último <b>animalito</b> qué salio:
+                </p>
+                <img src="<%= ultimoNumeroAnimalitoImagen %>" alt="">
+              </div>
+              <p class="mb-4 text-lg text-white" id="title">
+                A las: <b>
+                  <%= nuevaHora %>
+                </b> puede salir:
+              </p>
+              <!-- Imágenes de los posibles animales -->
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <% animalesConImagenes.forEach(animal=> { %>
+                  <div>
+                    <img src="<%= animal.imagenURL %>" alt="Imagen del animal <%= animal.numero %>">
+                  </div>
+                  <% }) %>
+              </div>
+              <% } else { %>
+                <p class="mb4 text-lg text-white p-4" id="title">
+                  No hay resultados hasta mañana a las 8:00 a.m.
+                </p>
+                <% } %>
+            </div>
+          </div>
+  </div>
+  <script src="/javascripts/interactionEjs.js"></script>
+</body>
+
+</html>
