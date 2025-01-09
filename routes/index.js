@@ -23,10 +23,6 @@ const fecha = () => {
 };
 
 const fechaActual = fecha();
-
-
-
-
 router.get('/', async (req, res) => {
   try {
     const resultados = await busquedaAnimales();
@@ -60,8 +56,6 @@ router.get('/', async (req, res) => {
 
 
     let ultimaHora = ultimoResultado.Hora;
-    
-    
     let [hora, minuto] = ultimaHora.split(':');
     let [horaNum, ampm] = hora.split(' ');
     horaNum = parseInt(horaNum);
@@ -71,9 +65,6 @@ router.get('/', async (req, res) => {
     fechaHora.setMinutes(parseInt(minuto));
     fechaHora.setHours(fechaHora.getHours() + 1);
     let nuevaHora = `${fechaHora.getHours()}:${fechaHora.getMinutes() < 10 ? '0' : ''}${fechaHora.getMinutes()} ${fechaHora.getHours() < 12 ? 'pm' : 'am'}`;
-    
-    
-    
     
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
@@ -160,7 +151,7 @@ router.post('/resultadosporfecha', async (req, res) => {
       fechaBusquedaAnimal = convertirFecha(fechaInput);
     }
 
-    console.log(fechaBusquedaAnimal);
+    console.log('Fecha de hoy: ',fechaBusquedaAnimal);
 
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
