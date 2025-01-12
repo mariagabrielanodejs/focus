@@ -88,9 +88,9 @@ router.get('/', async (req, res) => {
         hora: resultado.Hora
       }));
 
-      const fechaActualaGuardar = datosAGuardar[0].fecha;
+      
       await push(referenciaResultados, {
-        fecha: fechaActualaGuardar,
+        fecha: fechaActual,
         resultados: datosAGuardar
       });
 
