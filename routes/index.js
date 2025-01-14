@@ -64,7 +64,7 @@ router.get('/', async (req, res) => {
     fechaHora.setHours(horaNum);
     fechaHora.setMinutes(parseInt(minuto));
     fechaHora.setHours(fechaHora.getHours() + 1);
-    let nuevaHora = `${fechaHora.getHours()}:${fechaHora.getMinutes() < 10 ? '0' : ''}${fechaHora.getMinutes()} ${fechaHora.getHours() < 12 ? 'pm' : 'am'}`;
+    let nuevaHora = `${fechaHora.getHours()}:${fechaHora.getMinutes() < 10 ? '0' : ''}${fechaHora.getMinutes()} ${fechaHora.getHours() < 12 ? 'am' : 'pm'}`;
     
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
