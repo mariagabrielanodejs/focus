@@ -4,7 +4,13 @@ const busquedaAnimales = require('./animales');
 const combinacionesAnimales = require('./combinacionAnimalitos');
 const imagenesLotto = require('./imagenesAnimalitos');
 const db = require('./firebase');
-const { ref, push, query, get } = require('firebase/database');
+const { ref, push, query, get, } = require('firebase/database');
+const estadisticasAnimalitos = require('./estadisticas');
+
+
+
+
+
 
 const fecha = () => {
   let date = new Date();
@@ -182,9 +188,11 @@ router.post('/resultadosporfecha', async (req, res) => {
 
 
 
-
-
-
+// Ruta GET para obtener las estadísticas de los animales
+router.get('/estadisticas', async (req, res) => {
+  const estadisticas = await estadisticasAnimalitos();
+  res.render('estadisticas', { estadisticas });
+});
 
 
 
