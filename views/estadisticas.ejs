@@ -7,44 +7,93 @@
     <title>Estadísticas de Resultados</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
+    <link rel="stylesheet" href="/stylesheets/animalitos.css">
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-900 text-gray-100 p-8">
     <div class="container mx-auto max-w-7xl">
-        <div class="text-right mb-6">
-            <a href="/" class="px-4 py-2 bg-zinc-700 text-white rounded-md shadow-md hover:bg-zinc-600 transition duration-300 flex items-center gap-2 w-max">
-                <li class="fas fa-home"></li> Inicio</a>
+        <div class="mb-6 flex justify-between items-center">
+            <a href="/"
+                class="px-4 py-2 bg-zinc-700 text-white rounded-md shadow-md hover:bg-zinc-600 transition duration-300 flex items-center gap-2 w-max">
+                <li class="fas fa-home"></li> Inicio
+            </a>
+            <img src="images/logo_lotto.png" alt="Logo_lotto" class="h-24 w-24 max-content">
         </div>
-        <h1 class="text-5xl font-extrabold text-white text-center mb-12">
+        <h1 class="text-5xl font-extrabold text-white text-center">
             Estadísticas de Resultados
         </h1>
-
-        <!-- Tabla de estadísticas -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-gray-800 text-white rounded-lg shadow-lg">
-                <thead>
-                    <tr class="bg-gray-700">
-                        <th class="px-6 py-4 text-left">Imagen</th>
-                        <th class="px-6 py-4 text-left">Animal</th>
-                        <th class="px-6 py-4 text-left">Número</th>
-                        <th class="px-6 py-4 text-left">Veces que salió</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% estadisticas.forEach((stat) => { %>
-                        <tr class="border-b border-gray-600">
-                            <td class="px-6 py-4">
-                                <img src="<%= stat.imagenURL %>" alt="<%= stat.animal %>" class="w-20 h-20 w-max rounded-full">
-                            </td>
-                            <td class="px-6 py-4 font-bold"><%= stat.animal %></td>
-                            <td class="px-6 py-4 font-bold"><%= stat.numero %></td>
-                            <td class="px-6 py-4 font-bold"><%= stat.count %></td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        </div>
+        <h3 class="text-lg font-semibold text-center mb-8">Presiona un animalito para mostrar las fechas qué salieron</h3>
     </div>
+
+        <!-- Grid de tarjetas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 p-4">
+            <% estadisticas.forEach((stat, index)=> { %>
+                <a class="card bg-gray-800 p-6 rounded-xl shadow-xl hover:shadow-2xl cursor-pointer" data-toggle="modal"
+                    data-target="#modal<%= index %>" onclick="openModal(<%= index %>)">
+                    <img src="<%= stat.imagenURL %>" class="w-36 h-36 mx-auto rounded-full mb-4 w-max"
+                        alt="<%= stat.animal %>">
+                    <div class="text-center text-white">
+                        <p class="text-lg font-semibold">
+                            <%= stat.animal %>
+                        </p>
+                        <p class="text-lg">Número: <span class="font-bold">
+                                <%= stat.numero %>
+                            </span></p>
+                        <p class="text-lg">Veces que salió: <span class="font-bold">
+                                <%= stat.count %>
+                            </span></p>
+                    </div>
+                </a>
+                <% }) %>
+        </div>
+        <% estadisticas.forEach((stat, index)=> { %>
+            <div id="modal<%= index %>" class="modal">
+                <div id="modalContent" class="modal-content bg-gray-800">
+                    <span class="modal-close" onclick="closeModal(<%= index %>)">×</span>
+                    <div class="position-modal-content flex flex-col items-center justify-center">
+                        <img src="<%= stat.imagenURL %>" style="max-width: 220px;" alt="">
+                        <p class="text-2xl font-bold"><%= stat.animal %></p>
+                        <p class="mb-4 text-lg text-white flex flex-col" id="title">
+                        <p class="font-semibold mb-2">Fechas qué salió</p>
+                        <div class="fechas-grid">
+                            <% 
+                            const fechas = Array.isArray(stat.fechas) ? stat.fechas : stat.fechas.split(','); 
+                            for (let i = 0; i < fechas.length; i += 3) { 
+                                const chunk = fechas.slice(i, i + 3);
+                            %>
+                            <div class="flex">
+                                <% chunk.forEach(fecha => { %>
+                                    <span class="mr-4 mt-1 font-bold text-base"><i class="fa fa-calendar-days"></i> <%= fecha.trim() %></span>
+                                <% }) %>
+                            </div>
+                            <% } %>
+                        </div>
+                        </p>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            <% }) %>
+
+                <script>
+                    function openModal(index) {
+                        const modal = document.getElementById(`modal${index}`); // Selecciona el modal específico
+                        modal.classList.add('show'); // Mostrar el modal
+                    }
+
+                    function closeModal(index) {
+                        const modal = document.getElementById(`modal${index}`); // Selecciona el modal específico
+                        modal.classList.remove('show'); // Ocultar el modal
+                    }
+
+                </script>
 </body>
 
 </html>

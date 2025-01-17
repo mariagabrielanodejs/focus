@@ -28,9 +28,9 @@ const fecha = () => {
   return `${dateTime}`;
 };
 
-const fechaActual = fecha();
 router.get('/', async (req, res) => {
   try {
+    const fechaActual = fecha();
     const resultados = await busquedaAnimales();
 
     // Validar si hay resultados
@@ -60,18 +60,33 @@ router.get('/', async (req, res) => {
       };
     });
 
-
     let ultimaHora = ultimoResultado.Hora;
     let [hora, minuto] = ultimaHora.split(':');
     let [horaNum, ampm] = hora.split(' ');
     horaNum = parseInt(horaNum);
+
+    // Ajustar las horas a formato 24 horas
     if (ampm === 'pm' && horaNum < 12) horaNum += 12;
+    if (ampm === 'am' && horaNum === 12) horaNum = 0;
+
+    // Crear un objeto Date y sumar una hora
     let fechaHora = new Date();
     fechaHora.setHours(horaNum);
     fechaHora.setMinutes(parseInt(minuto));
+    fechaHora.setSeconds(0);
     fechaHora.setHours(fechaHora.getHours() + 1);
-    let nuevaHora = `${fechaHora.getHours()}:${fechaHora.getMinutes() < 10 ? '0' : ''}${fechaHora.getMinutes()} ${fechaHora.getHours() < 12 ? 'am' : 'pm'}`;
-    
+
+    // Convertir la hora nuevamente a formato 12 horas
+    let nuevaHoraNum = fechaHora.getHours();
+    let nuevaMinuto = fechaHora.getMinutes();
+    let nuevoAMPM = nuevaHoraNum >= 12 ? 'pm' : 'am';
+    nuevaHoraNum = nuevaHoraNum % 12;
+    nuevaHoraNum = nuevaHoraNum ? nuevaHoraNum : 12; // Si es 0, se convierte en 12
+
+    // Formatear la nueva hora
+    let nuevaHora = `${nuevaHoraNum}:${nuevaMinuto < 10 ? '0' : ''}${nuevaMinuto} ${nuevoAMPM}`;
+
+
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
     let existeFecha = false;
@@ -94,7 +109,6 @@ router.get('/', async (req, res) => {
         hora: resultado.Hora
       }));
 
-      
       await push(referenciaResultados, {
         fecha: fechaActual,
         resultados: datosAGuardar
@@ -114,8 +128,10 @@ router.get('/', async (req, res) => {
 
 
 
+
 router.get('/resultadosporfecha', async (req, res) => {
   try {
+    const fechaActual = fecha();
     const fechaBusqueda = fechaActual;
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
@@ -158,7 +174,7 @@ router.post('/resultadosporfecha', async (req, res) => {
       fechaBusquedaAnimal = convertirFecha(fechaInput);
     }
 
-    console.log('Fecha de hoy: ',fechaBusquedaAnimal);
+    console.log('Fecha de hoy: ', fechaBusquedaAnimal);
 
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
@@ -194,6 +210,9 @@ router.get('/estadisticas', async (req, res) => {
   const estadisticas = await estadisticasAnimalitos();
   res.render('estadisticas', { estadisticas });
 });
+
+
+
 
 
 
