@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadísticas de Resultados</title>
+    <title>Más salidos</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
     <link rel="stylesheet" href="/stylesheets/animalitos.css">
@@ -26,74 +26,83 @@
             <img src="images/logo_lotto.png" alt="Logo_lotto" class="h-24 w-24 max-content">
         </div>
         <h1 class="text-5xl font-extrabold text-white text-center">
-            Estadísticas de Resultados
+            Animalitos más salidos
         </h1>
-        <h3 class="text-lg font-semibold text-center mb-8">Presiona un animalito para mostrar las fechas qué salieron</h3>
+        <h3 class="text-lg font-semibold text-center">Presione un animalito para mostrar las fechas que salieron
+        </h3>
+        <div class="flex justify-center p-2 mr-2">
+            <a href="/enjaulados"
+                class="w-max px-4 py-2 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700 transition duration-300">
+                <i class="fas fa-filter mr-1"></i>Enjaulados
+            </a>
+        </div>
     </div>
 
-        <!-- Grid de tarjetas -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 p-4">
-            <% estadisticas.forEach((stat, index)=> { %>
-                <a class="card bg-gray-800 p-6 rounded-xl shadow-xl hover:shadow-2xl cursor-pointer" data-toggle="modal"
-                    data-target="#modal<%= index %>" onclick="openModal(<%= index %>)">
-                    <img src="<%= stat.imagenURL %>" class="w-36 h-36 mx-auto rounded-full mb-4 w-max"
-                        alt="<%= stat.animal %>">
-                    <div class="text-center text-white">
-                        <p class="text-lg font-semibold">
-                            <%= stat.animal %>
-                        </p>
-                        <p class="text-lg">Número: <span class="font-bold">
-                                <%= stat.numero %>
-                            </span></p>
-                        <p class="text-lg">Veces que salió: <span class="font-bold">
-                                <%= stat.count %>
-                            </span></p>
-                    </div>
-                </a>
-                <% }) %>
-        </div>
+    <!-- Grid de tarjetas -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 p-4">
         <% estadisticas.forEach((stat, index)=> { %>
-            <div id="modal<%= index %>" class="modal">
-                <div id="modalContent" class="modal-content bg-gray-800">
-                    <span class="modal-close" onclick="closeModal(<%= index %>)">×</span>
-                    <div class="position-modal-content flex flex-col items-center justify-center">
-                        <img src="<%= stat.imagenURL %>" style="max-width: 220px;" alt="">
-                        <p class="text-2xl font-bold"><%= stat.animal %></p>
-                        <p class="mb-4 text-lg text-white flex flex-col" id="title">
-                        <p class="font-semibold mb-2">Fechas qué salió</p>
-                        <div class="fechas-grid">
-                            <% 
-                            const fechas = Array.isArray(stat.fechas) ? stat.fechas : stat.fechas.split(','); 
-                            for (let i = 0; i < fechas.length; i += 3) { 
-                                const chunk = fechas.slice(i, i + 3);
-                            %>
+            <a class="card bg-gray-800 p-6 rounded-xl shadow-xl hover:shadow-2xl cursor-pointer" data-toggle="modal"
+                data-target="#modal<%= index %>" onclick="openModal(<%= index %>)">
+                <div class="text-center text-white">
+                    <p class="text-xl font-semibold mb-2">
+                        <%= stat.animal %> - <%= stat.numero %>
+                    </p>
+                </div>
+                <div class="flex items-center">
+                    <img src="<%= stat.imagenURL %>" class="w-32 h-32 mx-auto rounded-full mb-4 w-max"
+                        alt="<%= stat.animal %>">
+                    <div class="flex flex-col" style="transform: translateY(-15px);">
+                        <div class="font-bold" style="font-size: 4.5rem;">
+                            <%= stat.count %>
+                        </div>
+                        <div class="font-semibold">Veces a salido</div>
+                    </div>  
+                </div>
+                
+            </a>
+            <% }) %>
+    </div>
+    <% estadisticas.forEach((stat, index)=> { %>
+        <div id="modal<%= index %>" class="modal">
+            <div id="modalContent" class="modal-content bg-gray-800">
+                <span class="modal-close" onclick="closeModal(<%= index %>)">×</span>
+                <div class="position-modal-content flex flex-col items-center justify-center">
+                    <img src="<%= stat.imagenURL %>" style="max-width: 220px;" alt="">
+
+                    <p class="mb-4 text-lg text-white flex flex-col" id="title">
+                    <p class="font-semibold text-lg mb-2">Fechas qué salió</p>
+                    <div class="fechas-grid">
+                        <% const fechas=Array.isArray(stat.fechas) ? stat.fechas : stat.fechas.split(','); for (let i=0;
+                            i < fechas.length; i +=3) { const chunk=fechas.slice(i, i + 3); %>
                             <div class="flex">
-                                <% chunk.forEach(fecha => { %>
-                                    <span class="mr-4 mt-1 font-bold text-base"><i class="fa fa-calendar-days"></i> <%= fecha.trim() %></span>
-                                <% }) %>
+                                <% chunk.forEach(fecha=> { %>
+                                    <span class="mr-4 mt-1 font-bold text-base"><i class="fa fa-calendar-days"></i>
+                                        <%= fecha.trim() %>
+                                    </span>
+                                    <% }) %>
                             </div>
                             <% } %>
-                        </div>
-                        </p>
-                        </p>
                     </div>
-
+                    </p>
+                    </p>
                 </div>
+
             </div>
-            <% }) %>
+        </div>
+        <% }) %>
 
-                <script>
-                    function openModal(index) {
-                        const modal = document.getElementById(`modal${index}`); // Selecciona el modal específico
-                        modal.classList.add('show'); // Mostrar el modal
-                    }
+            <script>
+                function openModal(index) {
+                    const modal = document.getElementById(`modal${index}`); // Selecciona el modal específico
+                    modal.classList.add('show'); // Mostrar el modal
+                }
 
-                    function closeModal(index) {
-                        const modal = document.getElementById(`modal${index}`); // Selecciona el modal específico
-                        modal.classList.remove('show'); // Ocultar el modal
-                    }
+                function closeModal(index) {
+                    const modal = document.getElementById(`modal${index}`); // Selecciona el modal específico
+                    modal.classList.remove('show'); // Ocultar el modal
+                }
 
-                </script>
+            </script>
 </body>
 
 </html>
