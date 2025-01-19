@@ -12,21 +12,25 @@ const enjauladosAnimalitos = require('./enjaulados');
 
 
 
-  const fecha = () => {
-    let date = new Date();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes.toString().padStart(2, '0');
-    seconds = seconds.toString().padStart(2, '0');
-    let day = date.getDate().toString().padStart(2, '0');
-    let month = (date.getMonth() + 1).toString().padStart(2, '0');
-    let year = date.getFullYear();
-    let dateTime = `${day}-${month}-${year}`;
-    return `${dateTime}`;
-  };
+const fecha = () => {
+  let date = new Date().toLocaleString("en-US", { timeZone: "America/Caracas" });
+  date = new Date(date); 
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes.toString().padStart(2, '0');
+  seconds = seconds.toString().padStart(2, '0');
+  let day = date.getDate().toString().padStart(2, '0');
+  let month = (date.getMonth() + 1).toString().padStart(2, '0');
+  let year = date.getFullYear();
+  let dateTime = `${day}-${month}-${year}`;
+  return `${dateTime}`;
+
+
+
+};
 
 router.get('/', async (req, res) => {
   try {
@@ -90,6 +94,8 @@ router.get('/', async (req, res) => {
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
     let existeFecha = false;
+
+
     if (snapshot.exists()) {
       const datos = snapshot.val();
       for (const key in datos) {
@@ -212,7 +218,7 @@ router.get('/estadisticas', async (req, res) => {
 });
 
 
-router.get('/enjaulados', async(req,res) => {
+router.get('/enjaulados', async (req, res) => {
   const animalDiasSinSalir = await enjauladosAnimalitos();
   res.render('enjaulados', { animalDiasSinSalir })
 })

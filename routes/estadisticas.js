@@ -3,21 +3,21 @@ const { ref, push, query, get, } = require('firebase/database');
 
 module.exports = async function contarNumeros() {
 try {
-    const dataRef = ref(db, 'resultados'); // Ruta correcta de los resultados
+    const dataRef = ref(db, 'resultados'); 
     const snapshot = await get(query(dataRef));
 
     if (snapshot.exists()) {
-      const data = snapshot.val(); // Todos los datos desde Firebase
-
-      // Objetos para contar las ocurrencias de cada número y almacenar información adicional
+      const data = snapshot.val(); 
       let numeroCount = {};
-      let animalInfo = {}; // Almacenaremos el nombre, la imagen y las fechas
+      let animalInfo = {}; 
 
       Object.values(data).forEach((fecha) => {
         fecha.resultados.forEach((resultado) => {
           const numero = resultado.numero;
           const fechaActual = fecha.fecha;
-          // Si el número ya existe en el objeto, incrementamos su cuenta y añadimos la fecha
+
+          console.log('Fecha actual: ',fechaActual);
+
           if (numeroCount[numero]) {
             numeroCount[numero]++;
             animalInfo[numero].fechas.push(fechaActual);
