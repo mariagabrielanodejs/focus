@@ -115,9 +115,9 @@ router.get('/', async (req, res) => {
         hora: resultado.Hora
       }));
 
-      const fechaActualAnimalito = datosAGuardar.length > 0 ? datosAGuardar[0].fecha : null;
+      
       await push(referenciaResultados, {
-        fecha: fechaActualAnimalito,
+        fecha: fechaActual,
         resultados: datosAGuardar
       });
 
