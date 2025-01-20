@@ -27,9 +27,6 @@ const fecha = () => {
   let year = date.getFullYear();
   let dateTime = `${day}-${month}-${year}`;
   return `${dateTime}`;
-
-
-
 };
 
 router.get('/', async (req, res) => {
@@ -37,7 +34,6 @@ router.get('/', async (req, res) => {
     const fechaActual = fecha();
     const resultados = await busquedaAnimales();
 
-    // Validar si hay resultados
     if (!resultados || resultados.length === 0) {
       return res.render('resultados', {
         resultados: [],
@@ -65,37 +61,49 @@ router.get('/', async (req, res) => {
     });
 
     let ultimaHora = ultimoResultado.Hora;
-    let [hora, minuto] = ultimaHora.split(':');
-    let [horaNum, ampm] = hora.split(' ');
-    horaNum = parseInt(horaNum);
+    let nuevaHora = ''
+    if(ultimaHora  == '07:00 pm'){
+      nuevaHora = '08:00 am'
+    }
+    else if(ultimaHora  == '08:00 am'){
+      nuevaHora = '9:00 am'
+    }
+    else if(ultimaHora  == '09:00 am'){
+      nuevaHora = '10:00 am'
+    }
+    else if(ultimaHora  == '10:00 am'){
+      nuevaHora = '11:00 am'
+    }
+    else if(ultimaHora  == '11:00 am'){
+      nuevaHora = '12:00 pm'
+    }
+    else if(ultimaHora  == '12:00 pm'){
+      nuevaHora = '01:00 pm'
+    }
+    else if(ultimaHora  == '01:00 pm'){
+      nuevaHora = '02:00 pm'
 
-    // Ajustar las horas a formato 24 horas
-    if (ampm === 'pm' && horaNum < 12) horaNum += 12;
-    if (ampm === 'am' && horaNum === 12) horaNum = 0;
-
-    // Crear un objeto Date y sumar una hora
-    let fechaHora = new Date();
-    fechaHora.setHours(horaNum);
-    fechaHora.setMinutes(parseInt(minuto));
-    fechaHora.setSeconds(0);
-    fechaHora.setHours(fechaHora.getHours() + 1);
-
-    // Convertir la hora nuevamente a formato 12 horas
-    let nuevaHoraNum = fechaHora.getHours();
-    let nuevaMinuto = fechaHora.getMinutes();
-    let nuevoAMPM = nuevaHoraNum >= 12 ? 'pm' : 'am';
-    nuevaHoraNum = nuevaHoraNum % 12;
-    nuevaHoraNum = nuevaHoraNum ? nuevaHoraNum : 12; // Si es 0, se convierte en 12
-
-    // Formatear la nueva hora
-    let nuevaHora = `${nuevaHoraNum}:${nuevaMinuto < 10 ? '0' : ''}${nuevaMinuto} ${nuevoAMPM}`;
+    }
+    else if(ultimaHora  == '02:00 pm'){
+      nuevaHora = '03:00 pm'
+    }
+    else if(ultimaHora  == '03:00 pm'){
+      nuevaHora = '04:00 pm'
+    }
+    else if(ultimaHora  == '04:00 pm'){
+      nuevaHora = '05:00 pm'
+    }
+    else if(ultimaHora  == '05:00 pm'){
+      nuevaHora = '06:00 pm'
+    }
+    else if(ultimaHora  == '06:00 pm'){
+      nuevaHora = '07:00 pm'
+    }
 
 
     const referenciaResultados = ref(db, 'resultados');
     const snapshot = await get(referenciaResultados);
     let existeFecha = false;
-
-
     if (snapshot.exists()) {
       const datos = snapshot.val();
       for (const key in datos) {
@@ -224,8 +232,108 @@ router.get('/enjaulados', async (req, res) => {
 })
 
 
+/*
+const datosLotto = [
+  {
+      numero: "21",
+      animal: "GALLO",
+      fecha: "19-01-2025",
+      hora: "08:00 am",
+      imagenURL: "/images/21.png"
+  },
+  {
+      numero: "0",
+      animal: "DELFIN",
+      fecha: "19-01-2025",
+      hora: "09:00 am",
+      imagenURL: "/images/0.png"
+  },
+  {
+      numero: "19",
+      animal: "CHIVO",
+      fecha: "19-01-2025",
+      hora: "10:00 am",
+      imagenURL: "/images/19.png"
+  },
+  {
+      numero: "21",
+      animal: "GALLO",
+      fecha: "19-01-2025",
+      hora: "11:00 am",
+      imagenURL: "/images/21.png"
+  },
+  {
+      numero: "32",
+      animal: "ARDILLA",
+      fecha: "19-01-2025",
+      hora: "12:00 pm",
+      imagenURL: "/images/32.png"
+  },
+  {
+      numero: "10",
+      animal: "TIGRE",
+      fecha: "19-01-2025",
+      hora: "01:00 pm",
+      imagenURL: "/images/10.png"
+  },
+  {
+      numero: "10",
+      animal: "TIGRE",
+      fecha: "19-01-2025",
+      hora: "02:00 pm",
+      imagenURL: "/images/10.png"
+  },
+  {
+      numero: "03",
+      animal: "CIEMPIES",
+      fecha: "19-01-2025",
+      hora: "03:00 pm",
+      imagenURL: "/images/03.png"
+  },
+  {
+      numero: "25",
+      animal: "GALLINA",
+      fecha: "19-01-2025",
+      hora: "04:00 pm",
+      imagenURL: "/images/25.png"
+  },
+  {
+      numero: "18",
+      animal: "BURRO",
+      fecha: "19-01-2025",
+      hora: "05:00 pm",
+      imagenURL: "/images/18.png"
+  },
+  {
+      numero: "26",
+      animal: "VACA",
+      fecha: "19-01-2025",
+      hora: "06:00 pm",
+      imagenURL: "/images/26.png"
+  },
+  {
+      numero: "33",
+      animal: "PESCADO",
+      fecha: "19-01-2025",
+      hora: "07:00 pm",
+      imagenURL: "/images/33.png"
+  }
+];
+
+
+async function name() {
+  const referenciaResultados = ref(db, 'resultados');
+  await push(referenciaResultados, {
+  fecha: "19-01-2025",
+  resultados: datosLotto
+});
+}
 
 
 
+
+name()
+
+*/
 
 module.exports = router;
